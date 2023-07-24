@@ -19,7 +19,7 @@ app=Flask(__name__)
 
 facebank_path = "/static/reynolds.csv"
 deepPix_checkpoint_path = "/static/OULU_Protocol_2_model_0_0.onnx"
-livenessDetector = Livenessdetection(checkpoint_path=deepPix_checkpoint_path.as_posix())
+livenessDetector = LivenessDetection(checkpoint_path=deepPix_checkpoint_path.as_posix())
 
 @app.route("/")
 
