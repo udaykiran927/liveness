@@ -1,18 +1,11 @@
-from flask import Flask,render_template,redirect,request,Response,make_response,url_for,session,jsonify
+from flask import Flask,render_template,request,Response,jsonify
 import cv2
 import os
-import json
-from datetime import datetime
 import requests
 import numpy as np
 from PIL import Image
 from pathlib import Path
-from facetools import FaceDetection, LivenessDetection
-import pandas as pd
-import pyrebase
-import firebase_admin
-from firebase_admin import credentials, storage
-import pickle
+from facetools importLivenessDetection
 import base64
 import time
 import io
@@ -35,8 +28,6 @@ livenessDetector = LivenessDetection(checkpoint_path=deepPix_checkpoint_path.as_
 
 def home():
     return render_template("index.html")
-
-@app.route("/capture",methods=['POST','GET'])
 
 @app.route("/capture",methods=["POST","GET"])
 def capture():
@@ -96,7 +87,10 @@ def capture():
             return render_template("index.html",msg="Fake...Don't Cheat us 😄")'''
     liveness_score=livenessDetector(face_arr)
     print(liveness_score)
-    return str(liveness_score)
+    if liveness_score>0.65:
+        return "Real"
+    else:
+        return "fake"
 
 if __name__=='__main__':
     app.run(debug=True)
