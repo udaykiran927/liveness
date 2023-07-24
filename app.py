@@ -96,7 +96,7 @@ def capture():
             return render_template("index.html",msg="Fake...Don't Cheat us 😄")'''
     liveness_score=livenessDetector(face_arr)
     print(liveness_score)
-    return liveness_score
+    return str(liveness_score)
 
 if __name__=='__main__':
     app.run(debug=True)
