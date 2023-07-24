@@ -19,7 +19,7 @@ app=Flask(__name__)
 
 facebank_path = "/static/reynolds.csv"
 deepPix_checkpoint_path = "/static/OULU_Protocol_2_model_0_0.onnx"
-livenessDetector = ld(checkpoint_path=deepPix_checkpoint_path.as_posix())
+livenessDetector = Livenessdetection(checkpoint_path=deepPix_checkpoint_path.as_posix())
 
 @app.route("/")
 
@@ -29,30 +29,11 @@ def home():
 @app.route("/capture",methods=["POST","GET"])
 def capture():
     captured_image = request.form['image']
-    '''if year=="1":
-        std_data=database.child("First").child(dept).child(roll_no).get()
-    elif year=="2":
-        std_data=database.child("Second").child(dept).child(roll_no).get()
-    elif year=="3":
-        std_data=database.child("Third").child(dept).child(roll_no).get()
-    elif year=="4":
-        std_data=database.child("Four").child(dept).child(roll_no).get()
-    if std_data.val()['Room']=="":
-            return render_template("student.html",msg="No Class Scheduled Yet.")'''
 
     encoded_data = captured_image.split(',')[1]
     nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
     img1= cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     print(img1.shape[:2])
-    '''image1= Image.fromarray(img1)
-    image_bytes = io.BytesIO()
-    image1.save(image_bytes, format="JPG")
-    image_bytes = image_bytes.getvalue()
-    roll_path=storage.child(f"{roll_no}.jpg").get_url(None)
-    response = requests.get(roll_path)'''
-    '''faces, boxes = faceDetector(img1)
-    print(faces)
-    print(boxes)'''
     def extract_face(image, bbox):
         # Unpack the bounding box coordinates
         x_min, y_min, x_max, y_max = bbox
@@ -74,14 +55,6 @@ def capture():
 
     # Extract the face region using the bounding box and add it to the list
     face_arr = extract_face(img1, bbox)
-    '''for face_arr in :
-        #min_sim_score, mean_sim_score = identityChecker(face_arr)
-        liveness_score = livenessDetector(face_arr)
-        if liveness_score>0.65:
-            print("real")
-            return "Real"
-        else:
-            return render_template("index.html",msg="Fake...Don't Cheat us 😄")'''
     liveness_score=livenessDetector(face_arr)
     print(liveness_score)
     if liveness_score>0.65:
