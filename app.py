@@ -1,11 +1,15 @@
 from flask import Flask,render_template,request,Response,jsonify
 import cv2
+import urllib
+from pathlib import Path
+import numpy as np
+import onnxruntime
+import progressbar
+from PIL import Image
+from torchvision import transforms as T
 import os
 import requests
-import numpy as np
-from PIL import Image
-from pathlib import Path
-from facetools import LivenessDetection
+#from facetools import LivenessDetection
 import base64
 import time
 import io
@@ -13,7 +17,7 @@ import io
 
 app=Flask(__name__)
 
-root = Path(os.path.abspath(__file__)).parent.absolute()
+'''root = Path(os.path.abspath(__file__)).parent.absolute()
 data_folder = root / "data"
 
 #resNet_checkpoint_path = data_folder / "checkpoints" / "InceptionResnetV1_vggface2.onnx"
@@ -22,7 +26,7 @@ facebank_path = data_folder / "reynolds.csv"
 deepPix_checkpoint_path = data_folder / "checkpoints" / "OULU_Protocol_2_model_0_0.onnx"
 
 faceDetector = FaceDetection(max_num_faces=1)
-livenessDetector = LivenessDetection(checkpoint_path=deepPix_checkpoint_path.as_posix())
+livenessDetector = LivenessDetection(checkpoint_path=deepPix_checkpoint_path.as_posix())'''
 
 @app.route("/")
 
@@ -85,12 +89,13 @@ def capture():
             return "Real"
         else:
             return render_template("index.html",msg="Fake...Don't Cheat us 😄")'''
-    liveness_score=livenessDetector(face_arr)
+    '''liveness_score=livenessDetector(face_arr)
     print(liveness_score)
     if liveness_score>0.65:
         return "Real"
     else:
-        return "fake"
+        return "fake"'''
+    return str(face_arr)
 
 if __name__=='__main__':
     app.run(debug=True)
