@@ -51,7 +51,7 @@ class LivenessDetection:
         return liveness_score
 
 # Initialize the LivenessDetection class
-livenessDetector = LivenessDetection(checkpoint_path)
+livenessDetector = LivenessDetection(checkpoint_path=checkpoint_path)
 
 @app.route("/")
 
