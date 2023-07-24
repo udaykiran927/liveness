@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign In</title>
+    <style>
+        video {
+            width: 30%;
+            height: 7;
+        }
+        .progress-bar {
+            width: 30%;
+            height: 5px;
+            background-color: #f1f1f1;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #0a87ca;
+            border-radius: 4px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mits Attendnace</title>
+    <link rel="stylesheet"  type='text/css' media='screen' href="{{ url_for('static', filename='css/style3.css') }}">
+    <script>
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                var video = document.getElementById('video');
+                video.srcObject = stream;
+                // video.play();
+            })
+            .catch(function(error) {
+                console.log('Error accessing the camera: ', error);
+            });
+
+        function captureImage() {
+            var video = document.getElementById('video');
+            var canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            var context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var imageDataURL = canvas.toDataURL('image/jpeg');
+            
+            var progressBar = document.getElementById('progressBar');
+            progressBar.style.width = '10%';
+
+            var form = document.getElementById('captureForm');
+            var imageInput = document.getElementById('imageInput');
+            progressBar.style.width = '40%';
+            imageInput.value = imageDataURL;
+
+            progressBar.style.width = '60%';
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+            <!-- <input type="hidden" id="imageInput" name="image"> -->
+            <!-- <form id="captureForm" method="POST" action="/capture"></form> -->
+            <!-- <button type="button" onclick="captureImage()">Capture</button> -->
+            <marquee>{{msg}}</marquee>
+                  <form id="captureForm" method="POST" action="/capture">
+                    <center>
+                      <input type="hidden" id="imageInput" name="image">
+                      <br>
+                      <center><video id="video" autoplay></video>
+                    <div class="progress-bar">
+                        <div id="progressBar" class="progress-bar-fill" style="width: 0;"></div>
+                    </div></center>
+                    <br>
+                  </center>
+                  <center><div class="button">
+                    <input type="submit"  onclick="captureImage()" value="Capture"><br><br>
+                    </div></center>
+            
+            
+                  </form>
+                  
+              </div>
+              
+            </div>
+    
+</body>
+</html>
+
