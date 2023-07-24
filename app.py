@@ -16,7 +16,8 @@ import io
 
 
 app=Flask(__name__)
-
+app.config['STATIC_FOLDER'] = 'static'
+checkpoint_path = app.config['STATIC_FOLDER'] + '/OULU_Protocol_2_model_0_0.onnx'
 
 class LivenessDetection:
     def __init__(self, checkpoint_path: str):
@@ -50,7 +51,7 @@ class LivenessDetection:
         return liveness_score
 
 # Initialize the LivenessDetection class
-livenessDetector = LivenessDetection('/static/OULU_Protocol_2_model_0_0.onnx')
+livenessDetector = LivenessDetection(checkpoint_path=deepPix_checkpoint_path.as_posix())
 
 @app.route("/")
 
