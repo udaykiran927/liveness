@@ -25,7 +25,7 @@ class LivenessDetection:
             print("Downloading the DeepPixBiS onnx checkpoint:")
             urllib.request.urlretrieve(
                 "https://github.com/ffletcherr/face-recognition-liveness/releases/download/v0.1/OULU_Protocol_2_model_0_0.onnx",
-                Path(checkpoint_path).absolute().as_posix()
+                Path(checkpoint_path)
             )
         self.deepPix = onnxruntime.InferenceSession(
             checkpoint_path, providers=["CPUExecutionProvider"]
@@ -51,7 +51,7 @@ class LivenessDetection:
         return liveness_score
 
 # Initialize the LivenessDetection class
-livenessDetector = LivenessDetection(checkpoint_path=checkpoint_path.as_posix())
+livenessDetector = LivenessDetection(checkpoint_path)
 
 @app.route("/")
 
