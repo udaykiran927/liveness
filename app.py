@@ -9,7 +9,7 @@ from PIL import Image
 from torchvision import transforms as T
 import os
 import requests
-from facetools import liveness_detection.LivenessDetection as ld
+from facetools import LivenessDetection
 import base64
 import time
 import io
