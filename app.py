@@ -21,22 +21,12 @@ checkpoint_path = app.config['STATIC_FOLDER'] + '/OULU_Protocol_2_model_0_0.onnx
 
 class LivenessDetection:
     def __init__(self, checkpoint_path: str):
-        if not Path(checkpoint_path).is_file():
-            print("Downloading the DeepPixBiS onnx checkpoint:")
-            urllib.request.urlretrieve(
-                "https://github.com/ffletcherr/face-recognition-liveness/releases/download/v0.1/OULU_Protocol_2_model_0_0.onnx",
-                Path(checkpoint_path)
-            )
-        self.deepPix = onnxruntime.InferenceSession(
-            checkpoint_path, providers=["CPUExecutionProvider"]
-        )
-        self.trans = T.Compose(
-            [
-                T.Resize((224, 224)),
-                T.ToTensor(),
-                T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            ]
-        )
+        self.deepPix = onnxruntime.InferenceSession(checkpoint_path)
+        self.trans = T.Compose([
+            T.Resize((224, 224)),
+            T.ToTensor(),
+            T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
 
     def __call__(self, face_arr: np.ndarray) -> float:
         face_rgb = cv2.cvtColor(face_arr, cv2.COLOR_BGR2RGB)
@@ -51,7 +41,7 @@ class LivenessDetection:
         return liveness_score
 
 # Initialize the LivenessDetection class
-livenessDetector = LivenessDetection(checkpoint_path=checkpoint_path)
+livenessDetector = LivenessDetection(checkpoint_path)
 
 @app.route("/")
 
