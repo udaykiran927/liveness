@@ -17,8 +17,10 @@ import io
 
 app=Flask(__name__)
 
-facebank_path = "/static/reynolds.csv"
-deepPix_checkpoint_path = "/static/OULU_Protocol_2_model_0_0.onnx"
+root = Path(os.path.abspath(__file__)).parent.absolute()
+data_folder = root / "static"
+
+deepPix_checkpoint_path = data_folder / "OULU_Protocol_2_model_0_0.onnx"
 livenessDetector = LivenessDetection(checkpoint_path=deepPix_checkpoint_path.as_posix())
 
 @app.route("/")
