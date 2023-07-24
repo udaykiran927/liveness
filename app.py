@@ -9,7 +9,7 @@ from PIL import Image
 from torchvision import transforms as T
 import os
 import requests
-#from facetools import LivenessDetection
+from facetools import liveness_detection.LivenessDetection as ld
 import base64
 import time
 import io
@@ -17,16 +17,9 @@ import io
 
 app=Flask(__name__)
 
-'''root = Path(os.path.abspath(__file__)).parent.absolute()
-data_folder = root / "data"
-
-#resNet_checkpoint_path = data_folder / "checkpoints" / "InceptionResnetV1_vggface2.onnx"
-facebank_path = data_folder / "reynolds.csv"
-
-deepPix_checkpoint_path = data_folder / "checkpoints" / "OULU_Protocol_2_model_0_0.onnx"
-
-faceDetector = FaceDetection(max_num_faces=1)
-livenessDetector = LivenessDetection(checkpoint_path=deepPix_checkpoint_path.as_posix())'''
+facebank_path = "/static/reynolds.csv"
+deepPix_checkpoint_path = "/static/OULU_Protocol_2_model_0_0.onnx"
+livenessDetector = ld(checkpoint_path=deepPix_checkpoint_path.as_posix())
 
 @app.route("/")
 
@@ -89,13 +82,13 @@ def capture():
             return "Real"
         else:
             return render_template("index.html",msg="Fake...Don't Cheat us 😄")'''
-    '''liveness_score=livenessDetector(face_arr)
+    liveness_score=livenessDetector(face_arr)
     print(liveness_score)
     if liveness_score>0.65:
         return "Real"
     else:
-        return "fake"'''
-    return str(face_arr)
+        return "fake"
+    #return str(face_arr)
 
 if __name__=='__main__':
     app.run(debug=True)
