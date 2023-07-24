@@ -9,7 +9,7 @@ from PIL import Image
 from torchvision import transforms as T
 import os
 import requests
-from facetools import LivenessDetection
+#from facetools import LivenessDetection
 import base64
 import time
 import io
@@ -17,11 +17,40 @@ import io
 
 app=Flask(__name__)
 
-root = Path(os.path.abspath(__file__)).parent.absolute()
-data_folder = root / "static"
 
-deepPix_checkpoint_path = data_folder / "OULU_Protocol_2_model_0_0.onnx"
-livenessDetector = LivenessDetection(checkpoint_path=deepPix_checkpoint_path.as_posix())
+class LivenessDetection:
+    def __init__(self, checkpoint_path: str):
+        if not Path(checkpoint_path).is_file():
+            print("Downloading the DeepPixBiS onnx checkpoint:")
+            urllib.request.urlretrieve(
+                "https://github.com/ffletcherr/face-recognition-liveness/releases/download/v0.1/OULU_Protocol_2_model_0_0.onnx",
+                Path(checkpoint_path).absolute().as_posix()
+            )
+        self.deepPix = onnxruntime.InferenceSession(
+            checkpoint_path, providers=["CPUExecutionProvider"]
+        )
+        self.trans = T.Compose(
+            [
+                T.Resize((224, 224)),
+                T.ToTensor(),
+                T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            ]
+        )
+
+    def __call__(self, face_arr: np.ndarray) -> float:
+        face_rgb = cv2.cvtColor(face_arr, cv2.COLOR_BGR2RGB)
+        face_pil = Image.fromarray(face_rgb)
+        face_tensor = self.trans(face_pil).unsqueeze(0).detach().cpu().numpy()
+        output_pixel, output_binary = self.deepPix.run(
+            ["output_pixel", "output_binary"], {"input": face_tensor.astype(np.float32)}
+        )
+        liveness_score = (
+            np.mean(output_pixel.flatten()) + np.mean(output_binary.flatten())
+        ) / 2.0
+        return liveness_score
+
+# Initialize the LivenessDetection class
+livenessDetector = LivenessDetection('/static/OULU_Protocol_2_model_0_0.onnx')
 
 @app.route("/")
 
