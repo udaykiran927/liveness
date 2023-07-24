@@ -5,7 +5,7 @@ import requests
 import numpy as np
 from PIL import Image
 from pathlib import Path
-from facetools importLivenessDetection
+from facetools import LivenessDetection
 import base64
 import time
 import io
