@@ -7,14 +7,17 @@ from datetime import datetime
 import requests
 import numpy as np
 from PIL import Image
+import torch
+from torch.nn.functional import interpolate
+from torchvision import transforms as T
 from pathlib import Path
 import pandas as pd
 from io import StringIO
-
+from typing import List, Tuple
+import mediapipe as mp
 import base64
 import time
 import io
-from sklearn.neighbors import KNeighborsClassifier
 
 def imresample(img, sz):
     im_data = interpolate(img, size=sz, mode="area")
