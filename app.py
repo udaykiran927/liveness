@@ -38,6 +38,16 @@ def index():
 @app.route("/capture",methods=["POST","GET"])
 def capture():
     captured_image = request.form['image']
+    roll_no = request.form.get('rollno').upper()
+    encoded_data = captured_image.split(',')[1]
+    nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
+    img1 = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    image = Image.fromarray(img1)
+    save_path = f"upload_images/{roll_no}.jpg"
+    image.save(save_path)
+    storage.child(f'{roll}_cap.jpg').put(save_path)
+    os.remove(save_path)
+    '''captured_image = request.form['image']
     roll_no=request.form.get('rollno').upper()
     year=request.form.get('year')
     dept=request.form.get('dept').upper()
@@ -47,7 +57,7 @@ def capture():
     save_path = "upload_images/"+f'{roll}.jpg'
     cv2.imwrite(save_path,nparr)
     storage.child(f'{roll}_cap.jpg').put(save_path)
-    os.remove(save_path)
+    os.remove(save_path)'''
     return render_template("index.html",msg="captured")
     
 
