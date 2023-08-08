@@ -38,7 +38,7 @@ def index():
 @app.route("/capture",methods=["POST","GET"])
 def capture():
     captured_image = request.form['image']
-    roll_no = request.form.get('rollno').upper()
+    roll= request.form.get('rollno').upper()
     encoded_data = captured_image.split(',')[1]
     nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
     img1 = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
