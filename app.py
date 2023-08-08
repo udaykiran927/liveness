@@ -43,10 +43,9 @@ def capture():
     dept=request.form.get('dept').upper()
     encoded_data = captured_image.split(',')[1]
     nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
-    img1= cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    image = Image.open(img1)
+    #img1= cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     save_path = "upload_images/"+f'{roll}.jpg'
-    image.save(save_path)
+    cv2.imwrite(save_path,nparr)
     storage.child(f'{roll}_cap.jpg').put(save_path)
     os.remove(save_path)
     return render_template("index.html",msg="captured")
