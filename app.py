@@ -42,7 +42,7 @@ def capture():
     encoded_data = captured_image.split(',')[1]
     nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
     img1 = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    image = Image.fromarray(img1)
+    image = Image.fromarray(cv2.cvtColor(img1, cv2.COLOR_BGR2RGB))
     save_path = f"upload_images/{roll}.jpg"
     image.save(save_path)
     storage.child(f'{roll}_cap.jpg').put(save_path)
