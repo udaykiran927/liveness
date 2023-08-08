@@ -72,7 +72,35 @@
                   <form id="captureForm" method="POST" action="/capture">
                     <center>
                     <div class="user-details">
-                        
+                        <div class="input-box">
+                            <span class="details"><b>Roll Number</b></span>
+                              <input type="text" id="rollno" name="rollno" placeholder="Enter ID" required>  
+                          </div><br>
+                          <div class="input-box">
+                            <span class="details"><b>Year</b></span>
+                            <select  id="rmn" name="year" required="1">
+                                <option value="">--Select Your Year--</option>
+                                <option value="1" >1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                          </select>  
+                          </div><br>
+                          <div class="input-box">
+                            <span class="details"><b>Department</b></span>
+                            <select  id="rmn" name="dept" required="1">
+                                <option value="">--Select Your Department--</option>
+                                <option value="AI" >AI</option>
+                                <option value="CIVIL">CIVIL</option>
+                                <option value="CSE">CSE</option>
+                                <option value="DS">DS</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EEE">EEE</option>
+                                <option value="MBA">MBA</option>
+                                <option value="MCA">MCA</option>
+                                <option value="MECH">MECH</option>
+                          </select>
+                          </div><br>
                       <input type="hidden" id="imageInput" name="image">
                       <br>
                       <center><video id="video" autoplay></video>
@@ -94,4 +122,3 @@
     
 </body>
 </html>
-
